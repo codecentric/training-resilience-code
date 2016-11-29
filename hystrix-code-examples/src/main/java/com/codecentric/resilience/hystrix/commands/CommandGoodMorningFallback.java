@@ -6,17 +6,21 @@ import com.netflix.hystrix.HystrixCommandGroupKey;
 /**
  * @author Benjamin Wilms (xd98870)
  */
-public class CommandGoodMorning extends HystrixCommand<String> {
-
+public class CommandGoodMorningFallback extends HystrixCommand<String> {
     private String name;
 
-    protected CommandGoodMorning(String name) {
+    protected CommandGoodMorningFallback(String name) {
         super(HystrixCommandGroupKey.Factory.asKey("GoodMorningGroup"));
         this.name = name;
     }
 
     @Override
     protected String run() throws Exception {
-        return "Hallo, " + name + "!";
+        throw new RuntimeException("I mag nid! ;-) ");
+    }
+
+    @Override
+    protected String getFallback() {
+        return null;
     }
 }
