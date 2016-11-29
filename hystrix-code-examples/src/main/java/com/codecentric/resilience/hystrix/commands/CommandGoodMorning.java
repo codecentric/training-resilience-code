@@ -8,11 +8,14 @@ import com.netflix.hystrix.HystrixCommandGroupKey;
  */
 public class CommandGoodMorning extends HystrixCommand<String> {
 
+    private String name;
+
     protected CommandGoodMorning(String name) {
-        super(HystrixCommandGroupKey.Factory.asKey(null));
+        super(HystrixCommandGroupKey.Factory.asKey("GoodMorningGroup"));
+        this.name = name;
     }
 
     protected String run() throws Exception {
-        return null;
+        return "Hallo, " + name + "!";
     }
 }
