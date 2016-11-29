@@ -21,6 +21,6 @@ public class CommandGoodMorningFallback extends HystrixCommand<String> {
 
     @Override
     protected String getFallback() {
-        return null;
+        return "Hallo, " + name + "!";
     }
 }
