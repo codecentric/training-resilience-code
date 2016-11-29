@@ -1,0 +1,13 @@
+/.settings/
+/.project
+/.classpath
+/.factorypath
+/target/
+/.idea/
+*.iml
+*.ipr
+*.iws
+target
+rebel.xml
+*.log
+.sonar
