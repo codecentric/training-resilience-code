@@ -14,12 +14,14 @@ public class CommandGoodMorningExceptionWrapping extends HystrixCommand<String> 
         this.name = name;
     }
 
-    @Override protected String run() throws Exception {
+    @Override
+    protected String run() throws Exception {
         throw new RuntimeException("I mag nid! ;-) ");
     }
 
-    @Override protected String getFallback() {
+    @Override
+    protected String getFallback() {
 
-        return null;
+        return getFailedExecutionException().getMessage();
     }
 }
