@@ -19,6 +19,7 @@ public class CommandGoodMorningExceptionWrapping extends HystrixCommand<String> 
     }
 
     @Override protected String getFallback() {
-        return getFailedExecutionException().getMessage();
+
+        return null;
     }
 }
