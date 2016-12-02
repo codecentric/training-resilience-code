@@ -2,6 +2,7 @@ package com.codecentric.resilience.hystrix.commands;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import java.util.concurrent.Future;
 import org.junit.Test;
 
 /**
@@ -15,9 +16,11 @@ public class AsynchronCommandTest {
         String name = "Jim";
         CommandGoodMorning goodMorning = new CommandGoodMorning(name);
 
-        String resultExpected = null;
+        Future<String> stringFuture = goodMorning.queue();
 
-        assertThat(resultExpected, is("Hallo, " + name));
+        String resultExpected = stringFuture.get();
+
+        assertThat(resultExpected, is("Hallo, " + name + "!"));
 
     }
 }
