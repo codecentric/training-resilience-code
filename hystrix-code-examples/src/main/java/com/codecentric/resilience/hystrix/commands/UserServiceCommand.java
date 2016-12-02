@@ -1,5 +1,6 @@
 package com.codecentric.resilience.hystrix.commands;
 
+import com.codecentric.resilience.hystrix.service.UserService;
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
 
@@ -10,15 +11,17 @@ public class UserServiceCommand extends HystrixCommand<String> {
 
     private int id;
 
-    protected UserServiceCommand(final int id) {
+    private UserService userService;
+
+    protected UserServiceCommand(final int id, final UserService userService) {
         super(HystrixCommandGroupKey.Factory.asKey("UserServiceGroup"));
         this.id = id;
-
+        this.userService = userService;
     }
 
     @Override
     protected String run() throws Exception {
-        return null;
+        return userService.getUserNameById(id);
     }
 
     @Override

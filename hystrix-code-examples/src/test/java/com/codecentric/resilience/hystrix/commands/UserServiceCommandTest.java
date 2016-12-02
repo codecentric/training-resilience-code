@@ -26,7 +26,7 @@ public class UserServiceCommandTest {
 
         when(userServiceMock.getUserNameById(id)).thenReturn("Bob");
 
-        UserServiceCommand userServiceCommand = new UserServiceCommand(id);
+        UserServiceCommand userServiceCommand = new UserServiceCommand(id, userServiceMock);
 
         assertThat(userServiceCommand.execute(), is("Bob"));
     }
@@ -38,7 +38,7 @@ public class UserServiceCommandTest {
 
         when(userServiceMock.getUserNameById(id)).thenThrow(new RuntimeException("Sehr schlimmer Fehler"));
 
-        UserServiceCommand userServiceCommand = new UserServiceCommand(id);
+        UserServiceCommand userServiceCommand = new UserServiceCommand(id, userServiceMock);
 
         String expectedFallback = "Der User mit der Id " + id + " wurde nicht gefunden";
 
