@@ -18,8 +18,11 @@ public class ReactiveExecutionCommand {
 
         final String james = "James";
         CommandGoodMorning commandGoodMorning = new CommandGoodMorning(james);
-        
-        String single = null;
+
+        // Hot Observable
+        Observable<String> observe = commandGoodMorning.observe();
+
+        String single = observe.toBlocking().single();
 
         assertThat(single, is("Hallo, " + james + "!"));
         
