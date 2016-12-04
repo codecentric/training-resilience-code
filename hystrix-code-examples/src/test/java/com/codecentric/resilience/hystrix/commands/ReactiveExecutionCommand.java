@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;
 import rx.Observable;
+import rx.Observer;
 
 /**
  * @author Benjamin Wilms (xd98870)
@@ -32,6 +33,23 @@ public class ReactiveExecutionCommand {
         final String result = "Hallo, " + james + "!";
 
         CommandGoodMorning commandGoodMorning = new CommandGoodMorning(james);
+
+        // Cold Observable
+        Observable<String> observeCold = commandGoodMorning.toObservable();
+
+        observeCold.subscribe(new Observer<String>() {
+            public void onCompleted() {
+                System.out.println("--- Completed ---");
+            }
+
+            public void onError(Throwable throwable) {
+                System.out.println("--- Error ---");
+            }
+
+            public void onNext(String s) {
+                assertThat(s, is(result));
+            }
+        });
 
     }
 }
