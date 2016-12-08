@@ -6,6 +6,9 @@ import org.junit.Before;
 import org.junit.Test;
 import com.codecentric.resilience.hystrix.resource.LatentResource;
 import com.netflix.hystrix.Hystrix;
+import com.netflix.hystrix.HystrixCommandKey;
+import com.netflix.hystrix.HystrixCommandMetrics;
+import com.netflix.hystrix.metric.sample.HystrixCommandUtilization;
 
 /**
  * @author Benjamin Wilms (xd98870)
@@ -41,7 +44,7 @@ public class ConfigurationCommandExampleTest {
         boolean hystrixTimeoutEnabled = true;
 
         ConfigurationCommandExample configurationCommandExample =
-                new ConfigurationCommandExample(hystrixTimeout, hystrixTimeoutEnabled, latentResource);
+            new ConfigurationCommandExample(hystrixTimeout, hystrixTimeoutEnabled, latentResource);
 
         String result = configurationCommandExample.execute();
 
@@ -61,7 +64,10 @@ public class ConfigurationCommandExampleTest {
         String result = configurationCommandExample.execute();
 
         assertThat(result, is("Here it is..."));
+
+
     }
+
 
 
 }

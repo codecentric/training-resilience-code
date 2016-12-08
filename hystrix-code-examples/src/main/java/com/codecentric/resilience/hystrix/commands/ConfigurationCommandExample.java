@@ -10,7 +10,7 @@ import com.netflix.hystrix.HystrixCommandProperties;
  */
 public class ConfigurationCommandExample extends HystrixCommand<String> {
 
-    private static final String GROUP_KEY = "configGroupKey";
+    public static final String GROUP_KEY = "configGroupKey";
 
     private final LatentResource latentResource;
 
