@@ -1,11 +1,15 @@
 package com.codecentric.de.resilience.transport.rest;
 
+import javax.annotation.PreDestroy;
+import javax.ejb.EJB;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import com.codecentric.de.resilience.transport.cache.ConnoteCache;
+import com.codecentric.de.resilience.transport.commands.ConnoteRESTCommand;
+import com.netflix.hystrix.Hystrix;
 
 /**
  * @author Benjamin Wilms (xd98870)
@@ -14,6 +18,9 @@ import javax.ws.rs.core.Response;
 public class TransportBookingService {
 
     private final static String connoteUrl = "http://localhost:8999/connote";
+
+    @EJB
+    private ConnoteCache connoteCache;
 
     @GET
     @Path("/status")
@@ -25,16 +32,17 @@ public class TransportBookingService {
 
     @GET
     @Path("/create")
-    public Response createBooking() {
+    public Response createBooking2() {
         Client client = ClientBuilder.newClient();
 
-        //@formatter:off
-        String response = client.target(connoteUrl)
-                .path("create-chaos")
-                .request(MediaType.APPLICATION_JSON_TYPE)
-                .get(String.class);
-        //@formatter:on
+        String response = new ConnoteRESTCommand(client, connoteUrl).execute();
 
         return Response.status(200).entity(response).build();
+    }
+
+    @PreDestroy
+    private void tearDown() {
+        // Thread Pools down
+        Hystrix.reset();
     }
 }
