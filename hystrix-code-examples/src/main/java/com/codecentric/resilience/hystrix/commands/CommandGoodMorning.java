@@ -19,4 +19,9 @@ public class CommandGoodMorning extends HystrixCommand<String> {
     protected String run() throws Exception {
         return "Hallo, " + name + "!";
     }
+
+    @Override
+    protected String getCacheKey() {
+        return name;
+    }
 }
