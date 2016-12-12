@@ -2,25 +2,26 @@ package com.codecentric.de.resilience.transport.commands;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.MediaType;
-
 import com.codecentric.de.resilience.transport.cache.ConnoteCache;
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
+import com.netflix.hystrix.HystrixCommandKey;
 
 /**
  * @author Benjamin Wilms (xd98870)
  */
 public class ConnoteRESTCommand extends HystrixCommand<String> {
 
-    private static final String COMMAND_GROUPKEY = "ConnoteRESTCommandGroupKey";
+    public static final String COMMAND_GROUPKEY = "ConnoteRESTCommandGroupKey";
+
+    public static final HystrixCommandKey CONNOTE_KEY = HystrixCommandKey.Factory.asKey("ConnoteCommand");
 
     private final Client client;
 
     private final String connoteUrl;
 
-
     public ConnoteRESTCommand(Client client, String connoteUrl) {
-        super(HystrixCommandGroupKey.Factory.asKey(COMMAND_GROUPKEY));
+        super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(COMMAND_GROUPKEY)).andCommandKey(CONNOTE_KEY));
         this.client = client;
         this.connoteUrl = connoteUrl;
     }
