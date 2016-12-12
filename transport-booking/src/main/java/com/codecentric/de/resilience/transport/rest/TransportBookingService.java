@@ -19,7 +19,6 @@ public class TransportBookingService {
 
     private final static String connoteUrl = "http://localhost:8999/connote";
 
-    @EJB
     private ConnoteCache connoteCache;
 
     @GET
@@ -32,7 +31,7 @@ public class TransportBookingService {
 
     @GET
     @Path("/create")
-    public Response createBooking2() {
+    public Response createBooking() {
         Client client = ClientBuilder.newClient();
 
         String response = new ConnoteRESTCommand(client, connoteUrl).execute();
