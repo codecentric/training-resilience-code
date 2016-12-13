@@ -8,7 +8,10 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
 import com.codecentric.de.resilience.transport.cache.ConnoteCache;
 import com.codecentric.de.resilience.transport.commands.ConnoteRESTCommand;
+import com.codecentric.de.resilience.transport.dto.HystrixMetricDTO;
 import com.netflix.hystrix.Hystrix;
+import com.netflix.hystrix.HystrixCommandGroupKey;
+import com.netflix.hystrix.HystrixCommandKey;
 import com.netflix.hystrix.HystrixCommandMetrics;
 
 /**
@@ -25,32 +28,25 @@ public class TransportBookingService {
     @Path("/status")
     public Response getStatus() {
 
-        String newLine = "\b";
-
         try {
-            //@formatter:off
-        String hystrixStatus = new StringBuilder("Hystrix Status")
-                .append(newLine)
-                .append("GroupKey:")
-                .append(HystrixCommandMetrics.getInstance(ConnoteRESTCommand.CONNOTE_KEY).getCommandGroup())
-                .append(newLine)
-                .append("CommandKey:")
-                .append(HystrixCommandMetrics.getInstance(ConnoteRESTCommand.CONNOTE_KEY).getCommandKey())
-                .append(newLine)
-                .append(HystrixCommandMetrics.getInstance(ConnoteRESTCommand.CONNOTE_KEY).getHealthCounts())
-                .append(newLine)
-                .append("Error Count: ")
-                .append(HystrixCommandMetrics.getInstance(ConnoteRESTCommand.CONNOTE_KEY).getHealthCounts().getErrorCount())
-                .append(newLine)
-                .append("Total Requests: ")
-                .append(HystrixCommandMetrics.getInstance(ConnoteRESTCommand.CONNOTE_KEY).getHealthCounts().getTotalRequests())
-                .append(newLine)
-                .append("CurrentConcurrentExecutionCount:")
-                .append(newLine)
-                .append(HystrixCommandMetrics.getInstance(ConnoteRESTCommand.CONNOTE_KEY).getCurrentConcurrentExecutionCount())
-                .toString();
-        //@formatter:on
-            return Response.status(200).entity(hystrixStatus).build();
+            HystrixCommandGroupKey commandGroup =
+                HystrixCommandMetrics.getInstance(ConnoteRESTCommand.CONNOTE_KEY).getCommandGroup();
+            HystrixCommandKey commandKey = HystrixCommandMetrics.getInstance(ConnoteRESTCommand.CONNOTE_KEY).getCommandKey();
+
+            HystrixCommandMetrics.HealthCounts healthCounts =
+                HystrixCommandMetrics.getInstance(ConnoteRESTCommand.CONNOTE_KEY).getHealthCounts();
+            long errorCount =
+                HystrixCommandMetrics.getInstance(ConnoteRESTCommand.CONNOTE_KEY).getHealthCounts().getErrorCount();
+            long totalRequests =
+                HystrixCommandMetrics.getInstance(ConnoteRESTCommand.CONNOTE_KEY).getHealthCounts().getTotalRequests();
+            int currentConcurrentExecutionCount =
+                HystrixCommandMetrics.getInstance(ConnoteRESTCommand.CONNOTE_KEY).getCurrentConcurrentExecutionCount();
+            int averageExecutionTime = HystrixCommandMetrics.getInstance(ConnoteRESTCommand.CONNOTE_KEY).getTotalTimeMean();
+
+            //@formatter:on
+            return Response.status(200).entity(new HystrixMetricDTO(commandGroup.name(), commandKey.name(),
+                healthCounts.toString(), errorCount, totalRequests, currentConcurrentExecutionCount, averageExecutionTime))
+                .build();
         } catch (Exception e) {
             // keine Statusinfos vorhanden...
             return Response.status(200).entity("ok - unable to get hystrix metrics").build();

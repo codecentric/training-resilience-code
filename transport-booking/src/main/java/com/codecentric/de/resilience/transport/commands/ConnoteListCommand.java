@@ -29,7 +29,6 @@ public class ConnoteListCommand extends HystrixCommand<ConnoteDTO> {
         String result =
             client.target(connoteUrl).path("create").path("10").request(MediaType.APPLICATION_JSON_TYPE).get(String.class);
 
-        JsonParser jsonParser = null;
         ObjectMapper mapper = new ObjectMapper();
         ConnoteDTO connoteDTO = mapper.readValue(result, ConnoteDTO.class);
 
