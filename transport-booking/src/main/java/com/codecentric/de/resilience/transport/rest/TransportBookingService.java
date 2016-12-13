@@ -6,13 +6,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
-import com.codecentric.de.resilience.transport.cache.ConnoteCache;
 import com.codecentric.de.resilience.transport.commands.ConnoteRESTCommand;
 import com.codecentric.de.resilience.transport.dto.HystrixMetricDTO;
 import com.netflix.hystrix.Hystrix;
 import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.netflix.hystrix.HystrixCommandKey;
 import com.netflix.hystrix.HystrixCommandMetrics;
+import com.netflix.turbine.init.TurbineInit;
 
 /**
  * @author Benjamin Wilms (xd98870)
@@ -20,9 +20,16 @@ import com.netflix.hystrix.HystrixCommandMetrics;
 @Path("/transport-booking")
 public class TransportBookingService {
 
-    private final static String connoteUrl = "http://localhost:8999/connote";
+    public TransportBookingService() {
+        // Hystrix Turbine init
+        try {
+            TurbineInit.init();
+        } catch (Exception e) {
+            // doesn´t matter ;-)
+        }
+    }
 
-    private ConnoteCache connoteCache;
+    private final static String connoteUrl = "http://localhost:8999/connote";
 
     @GET
     @Path("/status")
