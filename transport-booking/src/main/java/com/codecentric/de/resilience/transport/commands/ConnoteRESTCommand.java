@@ -37,6 +37,8 @@ public class ConnoteRESTCommand extends HystrixCommand<String> {
         // Existiert ein Fallback Cache?
         Long connoteFromCache = ConnoteCache.getInstance().getConnoteFromCache();
         if (connoteFromCache == null) {
+
+
             return "{connote-error:" + getExecutionException().getMessage() + "}";
         } else
             return "{connote-fallback: " + connoteFromCache + "}";
