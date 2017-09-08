@@ -22,7 +22,7 @@ public class LambdaHystrixCommandTest {
     public void lambdaTest() throws Exception {
 
         String run = "Run it";
-        String fallback = "Fallback";
+        String fallback = "Fallback1";
 
         Supplier<String> stringRunSupplier = () -> run;
         Supplier<String> stringFallbackSupplier = () -> fallback;
